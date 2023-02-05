@@ -95,17 +95,7 @@ namespace UnityScreenNavigator.Runtime.Core.Sheet
 
         private void OnDestroy()
         {
-            foreach (var sheet in _sheets.Values)
-            {
-                Destroy(sheet.gameObject);
-            }
-
-            foreach (var assetLoadHandle in _assetLoadHandles.Values)
-            {
-                AssetLoader.Release(assetLoadHandle);
-            }
-
-            _assetLoadHandles.Clear();
+            UnregisterAll();
 
             InstanceCacheByName.Remove(_name);
             var keysToRemove = new List<int>();
@@ -505,6 +495,20 @@ namespace UnityScreenNavigator.Runtime.Core.Sheet
                     Interactable = true;
                 }
             }
+        }
+
+        /// <summary>
+        ///     Destroy and release all sheets.
+        /// </summary>
+        public void UnregisterAll()
+        {
+            foreach (var sheet in _sheets.Values)
+                Destroy(sheet.gameObject);
+
+            foreach (var assetLoadHandle in _assetLoadHandles.Values)
+                AssetLoader.Release(assetLoadHandle);
+
+            _assetLoadHandles.Clear();
         }
     }
 }
